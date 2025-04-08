@@ -4,7 +4,6 @@ import { Prisma } from '@prisma/client';
 import { HttpStatus, HttpMessage } from '../constants';
 import { ErrorCode } from '../constants';
 import { AppError } from '../utils/errors';
-// import { config } from '../config/env';
 
 /**
  * Middleware xử lý lỗi tập trung cho toàn bộ ứng dụng
@@ -27,6 +26,10 @@ export function errorMiddleware(
     //     path: req.path,
     //     method: req.method
     // });
+
+    console.log(`[Error Handler] ${err.message}`)
+    console.log(err.stack)
+
 
     // Xử lý AppError (custom error)
     if (err instanceof AppError) {

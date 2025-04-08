@@ -1,6 +1,4 @@
-// @ts-ignore
-import { ErrorCode } from '../constants/error.constants';
-import { HttpStatus } from '../constants';
+import { HttpStatus, ErrorCode } from '../constants';
 
 /**
  * Custom Error class để chuẩn hóa lỗi trong ứng dụng

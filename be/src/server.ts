@@ -2,11 +2,11 @@
 import app from "./app";
 import { config } from "dotenv";
 import http from "http";
-
+import {config as appConfig} from "./configs";
 config();
 
-const PORT: number = parseInt(process.env.BE_PORT || "3000", 10);
-const NODE_ENV: string = process.env.NODE_ENV || "development";
+const PORT: number = appConfig.app.APP_PORT;
+const NODE_ENV: string = appConfig.app.APP_ENV;
 
 const server = new http.Server(app);
 
