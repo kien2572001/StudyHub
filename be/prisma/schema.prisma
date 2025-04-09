@@ -1,9 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -22,6 +19,8 @@ model User {
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   refreshTokens RefreshToken[]
+  cardTemplates CardTemplate[]
+  decks         Deck[]
 }
 
 model RefreshToken {
@@ -31,4 +30,53 @@ model RefreshToken {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   expiresAt DateTime
   createdAt DateTime @default(now())
+}
+
+model Language {
+  id        Int      @id @default(autoincrement())
+  code      String   @unique // Ví dụ: en, ja, vi, etc.
+  name      String
+  isRtl     Boolean  @default(false)
+  hasKanji  Boolean  @default(false)
+
+  // Relations
+  decks     Deck[]
+}
+
+model CardTemplate {
+  id              Int      @id @default(autoincrement())
+  name            String
+  description     String?  @db.Text
+  frontStructure  Json     // Structure definition for front side
+  backStructure   Json     // Structure definition for back side
+  isSystem        Boolean  @default(false) // True for built-in templates
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  userId          String?
+  user            User?    @relation(fields: [userId], references: [id])
+  //cards           Card[]
+}
+
+model Deck {
+  id              Int       @id @default(autoincrement())
+  name            String
+  description     String?   @db.Text
+  path            String    // Hierarchical path like 1/2/3/4
+  level           Int       @default(1) // Depth in hierarchy
+  color           String?
+  isPublic        Boolean   @default(false)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime? @updatedAt
+
+  // Relations
+  userId          String
+  user            User      @relation(fields: [userId], references: [id])
+  parentDeckId    Int?
+  parentDeck      Deck?     @relation("DeckHierarchy", fields: [parentDeckId], references: [id])
+  childDecks      Deck[]    @relation("DeckHierarchy")
+  languageId      Int?
+  language        Language? @relation(fields: [languageId], references: [id])
+  //cards           Card[]
 }
