@@ -3,6 +3,7 @@
 
 import { ReactNode, useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import {ROUTES} from "@/config/routes";
 
 interface GuestGuardProps {
     children: ReactNode;
@@ -29,11 +30,11 @@ export const GuestGuard: React.FC<GuestGuardProps> = ({ children }) => {
                 try {
                     // Sử dụng import động để Next.js không xử lý nó trong quá trình SSR
                     const router = (await import('next/router')).default;
-                    router.replace('/');
+                    router.replace(ROUTES.DASHBOARD); // Chuyển hướng đến trang dashboard
                 } catch (error) {
                     // Fallback nếu import động thất bại
                     console.error('Router navigation failed:', error);
-                    window.location.href = '/';
+                    window.location.href = ROUTES.DASHBOARD; // Chuyển hướng đến trang dashboard
                 }
             };
 

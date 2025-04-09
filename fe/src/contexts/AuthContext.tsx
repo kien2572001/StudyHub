@@ -14,7 +14,8 @@ import {
     LOGIN_ROUTE,
     DASHBOARD_ROUTE,
     isPublicRoute,
-    PUBLIC_ROUTES
+    PUBLIC_ROUTES,
+    ROUTES
 } from '@/config/routes';
 
 // Định nghĩa kiểu dữ liệu cho context
@@ -65,8 +66,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         const pathname = window.location.pathname;
 
         // Nếu đã đăng nhập và đang ở trang login => redirect sang dashboard
-        if (isAuthenticated && pathname === LOGIN_ROUTE) {
-            window.location.href = DASHBOARD_ROUTE;
+        if (isAuthenticated && pathname === ROUTES.AUTH.LOGIN) {
+            window.location.href = ROUTES.DASHBOARD;
             return;
         }
 
@@ -74,7 +75,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         if (!isAuthenticated && !isPublicRoute(pathname)) {
             // Lưu đường dẫn hiện tại để redirect sau khi đăng nhập
             const returnUrl = encodeURIComponent(pathname + window.location.search);
-            window.location.href = `${LOGIN_ROUTE}?returnUrl=${returnUrl}`;
+            window.location.href = `${ROUTES.AUTH.LOGIN}?returnUrl=${returnUrl}`;
         }
     }, [isAuthenticated, loading, mounted]);
 
@@ -92,7 +93,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             if (returnUrl) {
                 window.location.href = decodeURIComponent(returnUrl);
             } else {
-                window.location.href = DASHBOARD_ROUTE;
+                window.location.href = ROUTES.DASHBOARD;
             }
         }
     };
@@ -105,7 +106,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
         // Sử dụng window.location thay vì router
         if (typeof window !== 'undefined') {
-            window.location.href = LOGIN_ROUTE;
+            window.location.href = ROUTES.AUTH.LOGIN;
         }
     };
 

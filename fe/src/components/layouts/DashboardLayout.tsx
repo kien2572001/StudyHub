@@ -19,7 +19,7 @@ import {
     UserOutlined
 } from '@ant-design/icons';
 import { useAuth } from '@/contexts/AuthContext'; // Thêm dòng này để import useAuth
-import { AUTHENTICATED_ROUTES, getMenuDataFromRoutes } from '@/config/routes';
+import { AUTHENTICATED_ROUTES, getMenuDataFromRoutes, ROUTES } from '@/config/routes';
 
 const IconMap = {
     'dashboard': <DashboardOutlined />,
@@ -194,7 +194,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
             // Chuyển hướng đến trang đăng nhập
             setTimeout(() => {
-                window.location.href = '/auth/login';
+                window.location.href = ROUTES.AUTH.LOGIN;
             }, 1000);
         } catch (error) {
             console.error('Lỗi khi đăng xuất:', error);
@@ -220,12 +220,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     pathname: '/welcome/welcome',
                 }}
                 menu={{ request: async () => loopMenuItem(AUTHENTICATED_ROUTES) }}
-                onMenuHeaderClick={() => window.location.href = '/'}
+                onMenuHeaderClick={() => window.location.href = ROUTES.DASHBOARD}
                 menuItemRender={(item, dom) => (
                     <a
                         onClick={(e) => {
                             e.preventDefault();
-                            if (item.path === '/logout') {
+                            if (item.path === ROUTES.LOGOUT) {
                                 handleLogout();
                             } else if (item.path) {
                                 window.location.href = item.path;

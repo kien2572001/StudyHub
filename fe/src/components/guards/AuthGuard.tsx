@@ -32,12 +32,10 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
                     const router = (await import('next/router')).default;
                     // Lưu URL hiện tại để redirect sau khi đăng nhập
                     const returnUrl = encodeURIComponent(window.location.pathname + window.location.search);
-                    //router.replace(`/login?returnUrl=${returnUrl}`);
                     router.replace(ROUTES.AUTH.LOGIN + `?returnUrl=${returnUrl}`);
                 } catch (error) {
                     // Fallback nếu import động thất bại
                     console.error('Router navigation failed:', error);
-                    //window.location.href = `/login?returnUrl=${encodeURIComponent(window.location.pathname)}`;
                     window.location.href = ROUTES.AUTH.LOGIN + `?returnUrl=${encodeURIComponent(window.location.pathname)}`;
                 }
             };
