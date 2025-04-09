@@ -2,13 +2,14 @@
 
 import type { MenuDataItem } from '@ant-design/pro-components';
 import { PageContainer, ProLayout } from '@ant-design/pro-components';
-import { Button, ConfigProvider, Dropdown, Space } from 'antd';
+import { Button, ConfigProvider, Dropdown, Space, message } from 'antd';
 import enUS from 'antd/lib/locale/en_US';
 import React, { useEffect, useState } from 'react';
 import {
     BookOutlined,
     CreditCardOutlined,
     DashboardOutlined,
+    DownOutlined,
     FormOutlined,
     LogoutOutlined,
     QuestionCircleOutlined,
@@ -17,6 +18,8 @@ import {
     TeamOutlined,
     UserOutlined
 } from '@ant-design/icons';
+import { useAuth } from '@/contexts/AuthContext'; // Thêm dòng này để import useAuth
+import { AUTHENTICATED_ROUTES, getMenuDataFromRoutes } from '@/config/routes';
 
 const IconMap = {
     'dashboard': <DashboardOutlined />,
@@ -170,16 +173,35 @@ const loopMenuItem = (menus: any[]): MenuDataItem[] =>
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
     // Client-side only rendering for the layout
     const [mounted, setMounted] = useState(false);
+    const { logout: authLogout, user } = useAuth(); // Lấy hàm logout và thông tin user từ AuthContext
+    const [loggingOut, setLoggingOut] = useState(false);
 
     useEffect(() => {
         setMounted(true);
     }, []);
 
     // Xử lý sự kiện logout
-    const handleLogout = () => {
-        // Thêm logic logout ở đây (ví dụ: xóa token, chuyển hướng đến trang login)
-        console.log('User logged out');
-        // window.location.href = '/login';
+    const handleLogout = async () => {
+        try {
+            setLoggingOut(true);
+            message.loading({ content: 'Đang đăng xuất...', key: 'logout' });
+
+            // Gọi hàm logout từ AuthContext
+            await authLogout();
+
+            // Hiển thị thông báo thành công
+            message.success({ content: 'Đã đăng xuất thành công!', key: 'logout', duration: 2 });
+
+            // Chuyển hướng đến trang đăng nhập
+            setTimeout(() => {
+                window.location.href = '/auth/login';
+            }, 1000);
+        } catch (error) {
+            console.error('Lỗi khi đăng xuất:', error);
+            message.error({ content: 'Đăng xuất thất bại, vui lòng thử lại!', key: 'logout' });
+        } finally {
+            setLoggingOut(false);
+        }
     };
 
     // Return null on first render to avoid hydration mismatch
@@ -197,7 +219,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 location={{
                     pathname: '/welcome/welcome',
                 }}
-                menu={{ request: async () => loopMenuItem(defaultMenus) }}
+                menu={{ request: async () => loopMenuItem(AUTHENTICATED_ROUTES) }}
                 onMenuHeaderClick={() => window.location.href = '/'}
                 menuItemRender={(item, dom) => (
                     <a
@@ -214,13 +236,16 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     </a>
                 )}
                 actionsRender={() => (
-                    <Button
-                        type="primary"
-                        icon={<LogoutOutlined />}
-                        onClick={handleLogout}
-                    >
-                        Logout
-                    </Button>
+                    <Space size="middle" style={{ marginRight: 24 }}>
+                        <Button
+                            type="primary"
+                            icon={<LogoutOutlined />}
+                            onClick={handleLogout}
+                            loading={loggingOut}
+                        >
+                            Logout
+                        </Button>
+                    </Space>
                 )}
             >
                 <PageContainer content="Welcome to StudyHub">
