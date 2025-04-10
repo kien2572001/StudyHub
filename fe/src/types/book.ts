@@ -14,6 +14,8 @@ export interface Book {
     lastOpened?: Date;
     userId: number;
     tags?: string;
+    readingProgress?: number; // Thêm trường này để lưu % đã đọc (từ 0-100)
+    currentPage?: number; // Trang hiện tại đang đọc
 }
 
 export interface Bookmark {

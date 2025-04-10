@@ -60,6 +60,8 @@ interface Book {
     bookmarks?: Bookmark[];
     notes?: Note[];
     bookContent?: BookContent;
+    readingProgress?: number; // Thêm trường này để lưu % đã đọc (từ 0-100)
+    currentPage?: number; // Trang hiện tại đang đọc
 }
 
 interface BookContent {
@@ -167,7 +169,9 @@ const BookLibraryPage: React.FC = () => {
                                 id: 1,
                                 bookId: 1,
                                 content: 'Full text content of the book would be here...'
-                            }
+                            },
+                            readingProgress: 32.5,  // 32.5% đã đọc
+                            currentPage: 151        // Đang ở trang 151
                         },
                         {
                             id: 2,
@@ -182,7 +186,9 @@ const BookLibraryPage: React.FC = () => {
                             userId: 1,
                             tags: JSON.stringify(['programming', 'career']),
                             bookmarks: [],
-                            notes: []
+                            notes: [],
+                            readingProgress: 78.2,  // 78.2% đã đọc
+                            currentPage: 275        // Đang ở trang 275
                         },
                         {
                             id: 3,
@@ -191,11 +197,31 @@ const BookLibraryPage: React.FC = () => {
                             fileUrl: '/books/design-patterns.pdf',
                             fileFormat: 'PDF',
                             fileSize: 5100000,
+                            pageCount: 395,
                             uploadDate: new Date('2023-03-10'),
                             userId: 1,
                             tags: JSON.stringify(['programming', 'design']),
                             bookmarks: [],
-                            notes: []
+                            notes: [],
+                            readingProgress: 5.8,   // 5.8% đã đọc
+                            currentPage: 23         // Đang ở trang 23
+                        },
+                        {
+                            id: 4,
+                            title: "JavaScript: The Good Parts",
+                            author: "Douglas Crockford",
+                            coverUrl: "https://m.media-amazon.com/images/I/5131OWtQRaL._SX381_BO1,204,203,200_.jpg",
+                            fileUrl: "/books/javascript-good-parts.pdf",
+                            fileFormat: "PDF",
+                            fileSize: 2800000,
+                            pageCount: 172,
+                            uploadDate: new Date('2023-02-18'),
+                            userId: 1,
+                            tags: JSON.stringify(['programming', 'javascript', 'web']),
+                            bookmarks: [],
+                            notes: [],
+                            readingProgress: 100,   // 100% đã đọc xong
+                            currentPage: 172        // Đã đọc hết sách
                         }
                     ];
                     setBooks(mockBooks);
@@ -467,6 +493,46 @@ const BookCard: React.FC<{ book: Book }> = ({ book }) => {
                     <Tag>+{JSON.parse(book.tags).length - 2}</Tag>
                 )}
             </div>
+
+            {/* Tiến độ đọc */}
+            {book.readingProgress !== undefined && (
+                <div style={{ marginTop: 12 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+                        <Text type="secondary" style={{ fontSize: '12px' }}>Reading Progress</Text>
+                        <Text strong style={{ fontSize: '12px' }}>{Math.round(book.readingProgress)}%</Text>
+                    </div>
+                    <div style={{
+                        height: 4,
+                        backgroundColor: '#f0f0f0',
+                        borderRadius: 2,
+                        overflow: 'hidden'
+                    }}>
+                        <div style={{
+                            height: '100%',
+                            width: `${book.readingProgress}%`,
+                            backgroundColor: '#1890ff',
+                            borderRadius: 2
+                        }} />
+                    </div>
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        marginTop: 4
+                    }}>
+                        {book.currentPage && book.pageCount && (
+                            <Text type="secondary" style={{ fontSize: '12px' }}>
+                                Page {book.currentPage} of {book.pageCount}
+                            </Text>
+                        )}
+                        {book.lastOpened && (
+                            <Text type="secondary" style={{ fontSize: '12px' }}>
+                                Last read: {new Date(book.lastOpened).toLocaleDateString()}
+                            </Text>
+                        )}
+                    </div>
+                </div>
+            )}
 
             <Space style={{ marginTop: 16 }}>
                 <Space size={4}>

@@ -156,7 +156,7 @@ const AddCardModal: React.FC<AddCardModalProps> = ({
                         >
                             <div className={`${styles.editorContainer} ${styles.frontEditor}`}>
                                 <Editor
-                                    apiKey='huk8rglwx002936sehcidvwi0nymctkdk8g8vx63xla8odr0'
+                                    apiKey={process.env.NEXT_PUBLIC_EDITOR_API_KEY}
                                     //tinymceScriptSrc="/tinymce/tinymce.min.js" // Đường dẫn đến TinyMCE script
                                     onInit={(evt, editor) => {
                                         // editor initialized
@@ -181,7 +181,7 @@ const AddCardModal: React.FC<AddCardModalProps> = ({
                         >
                             <div className={`${styles.editorContainer} ${styles.backEditor}`}>
                                 <Editor
-                                    apiKey='huk8rglwx002936sehcidvwi0nymctkdk8g8vx63xla8odr0'
+                                    apiKey={process.env.NEXT_PUBLIC_EDITOR_API_KEY}
                                     //tinymceScriptSrc="/tinymce/tinymce.min.js"
                                     initialValue=""
                                     value={backContent}
@@ -234,7 +234,7 @@ const AddCardModal: React.FC<AddCardModalProps> = ({
                         <Form.Item name="example" label={<Text strong>Example (Optional)</Text>}>
                             <div className={`${styles.editorContainer} ${styles.exampleEditor}`}>
                                 <Editor
-                                    apiKey='huk8rglwx002936sehcidvwi0nymctkdk8g8vx63xla8odr0'
+                                    apiKey={process.env.NEXT_PUBLIC_EDITOR_API_KEY}
                                     //tinymceScriptSrc="/tinymce/tinymce.min.js"
                                     initialValue=""
                                     value={exampleContent}
@@ -271,7 +271,7 @@ const AddCardModal: React.FC<AddCardModalProps> = ({
                         <Form.Item name="notes" label={<Text strong>Personal Notes</Text>} extra="Not shown during review">
                             <div className={`${styles.editorContainer} ${styles.notesEditor}`}>
                                 <Editor
-                                    apiKey='huk8rglwx002936sehcidvwi0nymctkdk8g8vx63xla8odr0'
+                                    apiKey={process.env.NEXT_PUBLIC_EDITOR_API_KEY}
                                     //tinymceScriptSrc="/tinymce/tinymce.min.js"
                                     initialValue=""
                                     value={notesContent}
