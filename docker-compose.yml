@@ -38,6 +38,30 @@ services:
       retries: 5
       start_period: 30s
 
+  studyhub-redis:
+    image: redis:7-alpine
+    container_name: studyhub-redis
+    restart: unless-stopped
+    ports:
+      - '${FORWARD_REDIS_PORT:-6379}:6379'
+    volumes:
+      - redis_data:/data
+    networks:
+      - studyhub-network
+    command: >
+      --requirepass ${REDIS_PASSWORD:-123456}  
+      --maxmemory 128mb  
+      --maxmemory-policy allkeys-lru  
+      --appendonly yes  
+      --appendfsync everysec
+    healthcheck:
+      test: [ "CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-redis_password}", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+
   # Adminer - Database Management Tool
   adminer:
     image: adminer:latest
@@ -59,4 +83,6 @@ networks:
 
 volumes:
   mysql_data:
+    driver: local
+  redis_data:
     driver: local

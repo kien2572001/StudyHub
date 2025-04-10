@@ -21,6 +21,7 @@ model User {
   refreshTokens RefreshToken[]
   cardTemplates CardTemplate[]
   decks         Deck[]
+  books         Book[]
 }
 
 model RefreshToken {
@@ -79,4 +80,28 @@ model Deck {
   languageId      Int?
   language        Language? @relation(fields: [languageId], references: [id])
   //cards           Card[]
+}
+
+model Book {
+  id            Int           @id @default(autoincrement())
+  title         String
+  author        String?       // Tên tác giả
+  description   String?       @db.Text
+  coverUrl      String?
+  fileUrl       String        // URL tới file sách
+  fileFormat    String    // Định dạng file: PDF, EPUB, MOBI, TXT...
+  fileSize      Int           // Kích thước file (bytes)
+  pageCount     Int?          // Số trang (nếu có)
+  contentHash   String?       // Hash của nội dung để tìm kiếm
+  uploadDate    DateTime      @default(now())
+  lastOpened    DateTime?     // Thời điểm sách được mở lần cuối
+  readingPage   Int?          // Trang hiện tại khi đọc
+  tags          String?       // Lưu dạng chuỗi JSON: ["fiction", "thriller"]
+
+  // Relations
+  userId        String
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  //notes         Note[]
+  //bookmarks     Bookmark[]
+  //bookContent   BookContent?
 }
