@@ -943,18 +943,39 @@ const BookReader: React.FC<ReaderProps> = ({ bookId }) => {
                                     <Text>There was an error loading the document. Please try again later.</Text>
                                 </div>
                             }
-                            // options={options}
-                            renderMode={"canvas"}
+                            options={options}
+                            renderMode="canvas"
                         >
                             <div style={styles.pdfContainer}>
                                 <div style={styles.pageContainer}>
-                                    <PDFPage
-                                        pageNumber={pageNumber}
-                                        width={documentRef.current?.offsetWidth ? documentRef.current.offsetWidth * 0.8 * scale : undefined}
-                                        scale={scale}
-                                        renderTextLayer={false}
-                                        renderAnnotationLayer={false}
-                                    />
+                                    {/*<PDFPage*/}
+                                    {/*    pageNumber={pageNumber}*/}
+                                    {/*    width={documentRef.current?.offsetWidth ? documentRef.current.offsetWidth * 0.8 * scale : undefined}*/}
+                                    {/*    scale={scale}*/}
+                                    {/*    renderTextLayer={false}*/}
+                                    {/*    renderAnnotationLayer={false}*/}
+                                    {/*/>*/}
+                                    <>
+                                        {[pageNumber-1, pageNumber, pageNumber+1].map(num => (
+                                            num > 0 && num <= (numPages || 0) && (
+                                                <div key={num} style={{
+                                                    display: num === pageNumber ? 'block' : 'none',
+                                                    position: 'relative'
+                                                }}>
+                                                    <PDFPage
+                                                        pageNumber={num}
+                                                        width={documentRef.current?.offsetWidth ? documentRef.current.offsetWidth * 0.8 * scale : undefined}
+                                                        scale={scale}
+                                                        renderTextLayer={false}
+                                                        renderAnnotationLayer={false}
+                                                        loading={
+                                                            num === pageNumber ? <Spin size="large" /> : null
+                                                        }
+                                                    />
+                                                </div>
+                                            )
+                                        ))}
+                                    </>
                                     {renderHighlightsOverlay()}
                                 </div>
                             </div>
