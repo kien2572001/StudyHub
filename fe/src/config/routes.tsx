@@ -67,6 +67,7 @@ export const ROUTES = {
     // Flashcard routes
     FLASH_CARDS: {
         BASE: '/flashcards',
+        DECKS: '/flashcards/decks',
         MY_DECKS: '/flashcards/my-decks',
         TEMPLATES: '/flashcards/templates',
         TAGS: '/flashcards/tags',
@@ -169,7 +170,7 @@ export const AUTHENTICATED_ROUTES: AppRoute[] = [
         routes: [
             {
                 key: 'my-decks',
-                path: '/flashcards/my-decks',
+                path: ROUTES.FLASH_CARDS.BASE,
                 name: 'My Decks',
             },
             {

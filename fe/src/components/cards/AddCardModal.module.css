@@ -1,0 +1,19 @@
+/* TinyMCE Container Styles */
+.editorContainer {
+    margin-bottom: 16px;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+/*.frontEditor, .backEditor, .exampleEditor, .notesEditor {*/
+/*    border: 1px solid #d9d9d9;*/
+/*    border-radius: 4px;*/
+/*}*/
+
+.frontEditor:focus-within,
+.backEditor:focus-within,
+.exampleEditor:focus-within,
+.notesEditor:focus-within {
+    border-color: #40a9ff;
+    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}

@@ -1,0 +1,2 @@
+// public/pdf-worker.js
+importScripts('https://cdn.jsdelivr.net/npm/pdfjs-dist@3.4.120/build/pdf.worker.min.js');
