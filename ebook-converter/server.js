@@ -6,6 +6,7 @@ const apiRoutes = require('./routes/api');
 const queueService = require('./services/queue');
 const s3Service = require('./services/s3');
 const converterService = require('./services/converter');
+const db = require('./config/db');
 
 // Khởi tạo Express
 const app = express();
@@ -48,7 +49,7 @@ async function processNextJob() {
             await converterService.convertToEpub(inputPath, outputPath);
 
             // Upload file đã chuyển đổi lên S3
-            const outputKey = `converted/${outputName}`;
+            const outputKey = `books/converted/${outputName}`;
             await s3Service.uploadFile(job.s3_bucket, outputKey, outputPath);
 
             // Tạo URL tải xuống
@@ -88,7 +89,18 @@ async function processNextJob() {
 }
 
 // Khởi động server và worker
-app.listen(PORT, () => {
-    console.log(`Server đang chạy tại http://localhost:${PORT}`);
-    processNextJob(); // Bắt đầu xử lý jobs
-});
+async function startServer() {
+    try {
+        await db.getConnection();
+        app.listen(PORT, () => {
+            console.log(`Server đang chạy tại http://localhost:${PORT}`);
+            processNextJob();
+        });
+    } catch (err) {
+        console.error('Failed to connect to database:', err);
+        process.exit(1);
+    }
+}
+
+// Khởi động server
+startServer();

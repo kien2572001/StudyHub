@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const queueService = require('../services/queue');
 const path = require('path');
+const db = require('../config/db');
 
 // API nhận request chuyển đổi
 router.post('/process', async (req, res) => {
@@ -54,7 +55,7 @@ router.get('/status/:jobId', async (req, res) => {
 // API kiểm tra sức khỏe
 router.get('/health', async (req, res) => {
     try {
-        const [rows] = await pool.execute('SELECT COUNT(*) as count FROM jobs WHERE status = "pending"');
+        const [rows] = await db.query('SELECT COUNT(*) as count FROM jobs WHERE status = "pending"');
         res.json({ status: 'OK', pending_jobs: rows[0].count });
     } catch (error) {
         res.status(500).json({ status: 'ERROR', error: error.message });

@@ -1,9 +1,9 @@
-const pool = require('../config/db');
+const db = require('../config/db');
 
 class QueueService {
     async addJob(job) {
         const { id, bucket, key } = job;
-        await pool.execute(
+        await db.query(
             'INSERT INTO jobs (id, s3_bucket, s3_key, status) VALUES (?, ?, ?, ?)',
             [id, bucket, key, 'pending']
         );
@@ -12,7 +12,7 @@ class QueueService {
     }
 
     async getNextJob() {
-        const [processingJobs] = await pool.execute(
+        const [processingJobs] = await db.query(
             'SELECT COUNT(*) as count FROM jobs WHERE status = ?',
             ['processing']
         );
@@ -21,7 +21,7 @@ class QueueService {
             return null;
         }
 
-        const [pendingJobs] = await pool.execute(
+        const [pendingJobs] = await db.query(
             'SELECT * FROM jobs WHERE status = ? ORDER BY created_at ASC LIMIT 1',
             ['pending']
         );
@@ -33,14 +33,14 @@ class QueueService {
         const fields = Object.keys(data).map(key => `${key} = ?`).join(', ');
         const values = [...Object.values(data), jobId];
 
-        await pool.execute(
+        await db.query(
             `UPDATE jobs SET ${fields} WHERE id = ?`,
             values
         );
     }
 
     async getJob(jobId) {
-        const [rows] = await pool.execute(
+        const [rows] = await db.query(
             'SELECT * FROM jobs WHERE id = ?',
             [jobId]
         );
