@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  ebook-converter:
+    build: .
+    container_name: ebook-converter
+    ports:
+      - "7000:3000"
+    environment:
+      - DB_HOST=your-mysql-host
+      - DB_USER=your-mysql-user
+      - DB_PASSWORD=your-mysql-password
+      - DB_NAME=ebook_converter
+      - AWS_ACCESS_KEY_ID=your-aws-access-key
+      - AWS_SECRET_ACCESS_KEY=your-aws-secret-key
+      - AWS_REGION=your-aws-region
+    volumes:
+      - ebook-temp:/app/temp
+    restart: unless-stopped
+
+volumes:
+  ebook-temp:
