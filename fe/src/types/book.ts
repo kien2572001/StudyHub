@@ -27,6 +27,8 @@ export interface Bookmark {
     created_at: Date;
     userId: number;
     bookId: number;
+
+    epubCfi?: string; // Thêm trường này để lưu CFI trong EPUB
 }
 
 export enum NoteType {
@@ -38,7 +40,7 @@ export enum NoteType {
 export interface Note {
     id: number;
     content?: string;
-    position_start: number;
+    position_start?: number;
     position_end?: number;
     page?: number;
     highlighted_text?: string;
@@ -49,4 +51,6 @@ export interface Note {
     userId: number;
     bookId: number;
     drawing_data?: string;
+
+    epubCfi?: string; // Thêm trường này để lưu CFI trong EPUB
 }

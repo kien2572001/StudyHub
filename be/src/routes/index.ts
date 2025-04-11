@@ -3,6 +3,7 @@ import authRoutes from './auth.routes';
 import userRoutes from './user.routes';
 import deckRoutes from "./deck.routes";
 import fileRoutes from './file.routes';
+import bookRoutes from './book.routes';
 import { ApiRoutes } from '../constants';
 
 const router = Router();
@@ -15,5 +16,6 @@ router.use(`${API_PREFIX}/auth`, authRoutes);
 router.use(`${API_PREFIX}/users`, userRoutes);
 router.use(`${API_PREFIX}/decks`, deckRoutes);
 router.use(`${API_PREFIX}/files`, fileRoutes);
+router.use(`${API_PREFIX}/books`, bookRoutes);
 
 export default router;
