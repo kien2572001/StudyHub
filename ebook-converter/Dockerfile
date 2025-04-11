@@ -8,6 +8,21 @@ RUN apt-get update && apt-get install -y \
     python3 \
     libegl1 \
     libfontconfig1 \
+    libopengl0 \
+    libxcb1 \
+    libxkbcommon0 \
+    libdbus-1-3 \
+    libxcb-cursor0 \
+    libxcb-xkb1 \
+    libxcb-xfixes0 \
+    libxcb-shape0 \
+    libxcb-render-util0 \
+    libxcb-icccm4 \
+    libxcb-image0 \
+    libxcb-keysyms1 \
+    libxcb-randr0 \
+    libxcb-xinerama0 \
+    libnss3 \
     && rm -rf /var/lib/apt/lists/*
 
 # Cài đặt Calibre
