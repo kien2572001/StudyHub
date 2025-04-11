@@ -12,6 +12,7 @@ services:
       MYSQL_PASSWORD: ${DB_PASSWORD}
     volumes:
       - mysql-data:/var/lib/mysql
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/schema.sql
     # Đã loại bỏ phần ports để không mở cổng ra bên ngoài
     command: --default-authentication-plugin=mysql_native_password
     healthcheck:
