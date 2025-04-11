@@ -1,17 +1,36 @@
-
 version: '3'
 
 services:
-  ebook-converter:
-    build: .
-    container_name: ebook-converter
-    ports:
-      - "7000:3000"
+  ebook-converter-mysql:
+    image: mysql:8.0
+    container_name: ebook-converter-mysql
+    restart: unless-stopped
     environment:
-      - DB_HOST=${DB_HOST}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-123456}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - mysql-data:/var/lib/mysql
+    # Đã loại bỏ phần ports để không mở cổng ra bên ngoài
+    command: --default-authentication-plugin=mysql_native_password
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-123456}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  ebook-converter-app:
+    build: .
+    container_name: ebook-converter-app
+    ports:
+      - "7000:3000"  # Giữ nguyên port này để truy cập ứng dụng từ bên ngoài
+    environment:
+      - DB_HOST=ebook-converter-mysql
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_NAME=${DB_NAME}
+      - DB_PORT=3306
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
       - AWS_REGION=${AWS_REGION}
@@ -24,6 +43,10 @@ services:
     volumes:
       - ebook-temp:/app/temp
     restart: unless-stopped
+    depends_on:
+      ebook-converter-mysql:
+        condition: service_healthy
 
 volumes:
   ebook-temp:
+  mysql-data:
