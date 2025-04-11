@@ -27,7 +27,7 @@ export class AuthMiddleware {
             // @ts-ignore - req.user is set by authenticate middleware
             //fix late
             req.user = decoded;
-            console.log('decoded', decoded);
+            // console.log('decoded', decoded);
             next();
         }
     );

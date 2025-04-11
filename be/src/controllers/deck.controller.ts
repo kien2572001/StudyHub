@@ -29,7 +29,7 @@ export class DeckController {
     // Get all decks for current user
     public getUserDecks = asyncHandler(async (req: Request, res: Response) => {
         // @ts-ignore - req.user is set by auth middleware
-        const userId = req.user.id;
+        const userId : string = req.user?.userId;
         const {
             parentDeckId,
             search,
@@ -63,7 +63,7 @@ export class DeckController {
     public updateDeck = asyncHandler(async (req: Request, res: Response) => {
         const deckId = parseInt(req.params.id);
         // @ts-ignore - req.user is set by auth middleware
-        const userId = req.user.id;
+        const userId : string = req.user?.userId;
         const updateData = req.body;
 
         const result = await this.deckService.updateDeck(deckId, userId, updateData);
@@ -74,7 +74,7 @@ export class DeckController {
     public deleteDeck = asyncHandler(async (req: Request, res: Response) => {
         const deckId = parseInt(req.params.id);
         // @ts-ignore - req.user is set by auth middleware
-        const userId = req.user.id;
+        const userId : string = req.user?.userId;
 
         const result = await this.deckService.deleteDeck(deckId, userId);
         return ApiHandler.success(res, result, 'Deck deleted successfully');
