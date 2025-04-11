@@ -1,0 +1,10 @@
+{
+  "name": "s3-trigger-lambda",
+  "version": "1.0.0",
+  "description": "Lambda function to trigger EC2 when files are uploaded to S3",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {}
+}
