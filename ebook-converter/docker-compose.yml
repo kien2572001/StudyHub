@@ -7,13 +7,19 @@ services:
     ports:
       - "7000:3000"
     environment:
-      - DB_HOST=your-mysql-host
-      - DB_USER=your-mysql-user
-      - DB_PASSWORD=your-mysql-password
-      - DB_NAME=ebook_converter
-      - AWS_ACCESS_KEY_ID=your-aws-access-key
-      - AWS_SECRET_ACCESS_KEY=your-aws-secret-key
-      - AWS_REGION=your-aws-region
+      - DB_HOST=${DB_HOST}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_REGION=${AWS_REGION}
+      - S3_BUCKET=${S3_BUCKET}
+      - S3_ORIGINAL_PREFIX=${S3_ORIGINAL_PREFIX:-original}
+      - S3_CONVERTED_PREFIX=${S3_CONVERTED_PREFIX:-converted}
+      - JOB_CLEANUP_DAYS=${JOB_CLEANUP_DAYS:-7}
+      - JOB_DOWNLOAD_URL_EXPIRY=${JOB_DOWNLOAD_URL_EXPIRY:-604800}
+      - PORT=3000
     volumes:
       - ebook-temp:/app/temp
     restart: unless-stopped
